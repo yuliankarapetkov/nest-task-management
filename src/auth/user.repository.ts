@@ -1,6 +1,8 @@
 import { ConflictException } from '@nestjs/common';
 import { Repository, EntityRepository } from 'typeorm';
 
+import * as bcryptjs from 'bcryptjs';
+
 import { TypeOrmErrorCode } from '../models';
 import { AuthCredentialsDto } from './dtos';
 import { User } from './user.entity';
@@ -11,7 +13,8 @@ export class UserRepository extends Repository<User> {
         const user = new User();
 
         user.username = username;
-        user.password = password;
+        user.passwordSalt = await bcryptjs.genSalt();
+        user.password = await bcryptjs.hash(password, user.passwordSalt);
 
         try {
             await user.save();
