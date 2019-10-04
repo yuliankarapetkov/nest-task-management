@@ -26,4 +26,14 @@ export class UserRepository extends Repository<User> {
             }
         }
     }
+
+    async signIn({ username, password }: AuthCredentialsDto): Promise<string> {
+        const user = await User.findOne({ username });
+
+        if (user && await user.validatePassword(password)) {
+            return user.username;
+        }
+
+        return null;
+    }
 }
