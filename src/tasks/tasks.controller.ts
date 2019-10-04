@@ -12,11 +12,11 @@ export class TasksController {
         private _tasksService: TasksService
     ) {}
 
-    // @Get()
-    // @UsePipes(ValidationPipe)
-    // getAll(@Query() filterDto: GetTasksFilterDto): Task[] {
-    //     return this._tasksService.getTasks(filterDto);
-    // }
+    @Get()
+    @UsePipes(ValidationPipe)
+    getAll(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
+        return this._tasksService.getTasks(filterDto);
+    }
 
     @Get('/:id')
     getById(@Param('id', ParseIntPipe) id: number): Promise<Task> {
