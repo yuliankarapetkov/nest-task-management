@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe, ParseIntPipe } from '@nestjs/common';
 
-import { TasksService } from './tasks.service';
-
 import { CreateTaskDto, GetTasksFilterDto } from './dtos';
 import { TaskStatusValidationPipe } from './pipes';
+import { TasksService } from './tasks.service';
 import { Task } from './task.entity';
+import { TaskStatus } from './task-status.enum';
 
 @Controller('/tasks')
 export class TasksController {
@@ -29,13 +29,13 @@ export class TasksController {
         return this._tasksService.createTask(createTaskDto);
     }
 
-    // @Patch('/:id/status')
-    // updateStatus(
-    //     @Param('id') id: string,
-    //     @Body('status', TaskStatusValidationPipe) status: TaskStatus
-    // ): Task {
-    //     return this._tasksService.updateTaskStatus(id, status);
-    // }
+    @Patch('/:id/status')
+    updateStatus(
+        @Param('id', ParseIntPipe) id: number,
+        @Body('status', TaskStatusValidationPipe) status: TaskStatus
+    ): Promise<Task> {
+        return this._tasksService.updateTaskStatus(id, status);
+    }
 
     @Delete('/:id')
     remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
