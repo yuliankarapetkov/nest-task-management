@@ -13,6 +13,7 @@ export class TasksController {
     ) {}
 
     @Get()
+    @UsePipes(ValidationPipe)
     getAll(@Query() filterDto: GetTasksFilterDto): Task[] {
         return this._tasksService.getTasks(filterDto);
     }
