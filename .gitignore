@@ -2,9 +2,6 @@
 /dist
 /node_modules
 
-# configs (containing sensitive info)
-/src/config
-
 # Logs
 logs
 *.log
