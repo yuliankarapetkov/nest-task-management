@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
+import { GetUser } from '../auth/get-user.decorator';
+import { User } from '../auth/user.entity';
 import { CreateTaskDto, GetTasksFilterDto } from './dtos';
 import { TaskStatusValidationPipe } from './pipes';
 import { TasksService } from './tasks.service';
@@ -27,8 +29,8 @@ export class TasksController {
 
     @Post()
     @UsePipes(ValidationPipe)
-    create(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
-        return this._tasksService.createTask(createTaskDto);
+    create(@Body() createTaskDto: CreateTaskDto, @GetUser() user: User): Promise<Task> {
+        return this._tasksService.createTask(createTaskDto, user);
     }
 
     @Patch('/:id/status')

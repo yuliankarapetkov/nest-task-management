@@ -1,6 +1,7 @@
 import { GetTasksFilterDto } from './dtos/get-tasks-filter.dto';
 import { Repository, EntityRepository } from 'typeorm';
 
+import { User } from './../auth/user.entity';
 import { CreateTaskDto } from './dtos';
 import { Task } from './task.entity';
 import { TaskStatus } from './task-status.enum';
@@ -21,14 +22,17 @@ export class TaskRepository extends Repository<Task> {
         return await query.getMany();
     }
 
-    async createTask({ title, description }: CreateTaskDto): Promise<Task> {
+    async createTask({ title, description }: CreateTaskDto, user: User): Promise<Task> {
         const task = new Task();
 
         task.title = title;
         task.description = description;
         task.status = TaskStatus.Open;
+        task.user = user;
 
         await task.save();
+
+        delete task.user;
 
         return task;
     }
